@@ -15,10 +15,10 @@ int rand_range(int start, int end) {
 	**/
 	int len = end - start;
 	assert(len > 0);
-	return rand() % len;
+	return rand() % len + start;
 }
 
-void mem_shuffle(void *block_start; int n_units; size_t unit_size) {
+void mem_shuffle(void *block_start, int n_units, size_t unit_size) {
 	/** Breaks a block of memory into a number of units and shuffles those units.
 
 			Parameters
@@ -37,14 +37,14 @@ void mem_shuffle(void *block_start; int n_units; size_t unit_size) {
 	**/
 	void *current_ptr, *swap_ptr;
 	int swap_idx;
-	void *copybuffer = malloc(unit_size);
+	void *copy_buffer = malloc(unit_size);
 	for (int current_idx=0; current_idx < n_units; current_idx++) {
 		// copy value of current index to copy_buffer
 		current_ptr = block_start + (current_idx * unit_size);
 		memcpy(copy_buffer, current_ptr, unit_size);
 		// copy value of random index to current index
 		swap_idx = rand_range(current_idx, n_units);
-		swap_ptr = block_start + (item_size * swap_idx);
+		swap_ptr = block_start + (unit_size * swap_idx);
 		memcpy(current_ptr, swap_ptr, unit_size);
 		// copy saved value of current index to swap index
 		memcpy(swap_ptr, copy_buffer, unit_size);

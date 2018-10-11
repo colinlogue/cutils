@@ -6,6 +6,6 @@
 #include <string.h>
 
 int rand_range(int, int);
-void mem_shuffle(void *; int; size_t);
+void mem_shuffle(void *, int, size_t);
 
 #endif
