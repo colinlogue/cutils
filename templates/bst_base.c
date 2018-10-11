@@ -46,7 +46,7 @@ CONTENT_TYPE <<LABEL>>_bst_get_item_at(int, bst_node_t *);
 #define list_t <<LABEL>>_list_t
 #define CONTENT_TYPE <<TYPE>>
 
-const int REBALANCE_THRESHOLD = 2
+const int REBALANCE_THRESHOLD = 2;
 
 // STATIC FUNCTIONS
 static bst_node_t *add_node(bst_node_t *, bst_node_t *, bst_node_t *);

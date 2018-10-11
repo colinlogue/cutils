@@ -8,6 +8,7 @@
 #define list_t int_list_t
 #define CONTENT_TYPE int
 
+const int REBALANCE_THRESHOLD = 2;
 
 // STATIC FUNCTIONS
 static bst_node_t *add_node(bst_node_t *, bst_node_t *, bst_node_t *);
@@ -21,6 +22,28 @@ static int size(bst_node_t *);
 
 
 bst_node_t *add_node(bst_node_t *new_node, bst_node_t *tree, bst_node_t *parent) {
+  /** Adds a node to the tree.
+
+      Parameters
+      ----------
+      new_node : *bst_node_t
+          Pointer ot the node to be added to the tree.
+      tree : *bst_node_t
+          Pointer to the tree to add the node to.
+      parent : *bst_node_t
+          Pointer to the parent node of tree, or NULL if tree is the root.
+
+      Returns
+      -------
+      *bst_node_t
+          Pointer to the root node of the tree after rebalancing.
+
+      Notes
+      -----
+      If adding the node to the tree unbalances it, then the function will call
+      the rebalance function and return the result. The threshold for being
+      unbalanced is the constant REBALANCE_THRESHOLD.
+  **/
   bst_node_t **next_ptr;
   // sort direction
   if (new_node->sort_val < tree->sort_val) {
@@ -41,7 +64,7 @@ bst_node_t *add_node(bst_node_t *new_node, bst_node_t *tree, bst_node_t *parent)
     *next_ptr = new_node;
   }
   int balance = tree->n_right - tree->n_left;
-  if (balance < -1 || balance > 1) {
+  if (balance < -REBALANCE_THRESHOLD || balance > REBALANCE_THRESHOLD) {
   	return rebalance(balance, tree, parent);
   }
   else {
@@ -51,6 +74,18 @@ bst_node_t *add_node(bst_node_t *new_node, bst_node_t *tree, bst_node_t *parent)
 
 
 CONTENT_TYPE get_height(bst_node_t *tree) {
+  /** Returns the height of the tree from the given node.
+
+      Parameters
+      ----------
+      tree : *bst_node_t
+          Pointer to the node to calculate the height for.
+
+      Returns
+      -------
+      height : int
+          Height of the tree from the given node.
+  **/
   if (!tree) {
     return 0;
   }
@@ -61,6 +96,19 @@ CONTENT_TYPE get_height(bst_node_t *tree) {
 
 
 CONTENT_TYPE get_nth_item(int n, bst_node_t *tree) {
+  /** Returns the nth item from the left of the tree.
+
+      Parameters
+      ----------
+      n: int
+          The index of the item to find. Must be less then the number of nodes
+          in the tree.
+
+      Returns
+      -------
+      value : int
+          The value of the content of the located node.
+    **/
   list_t *items = int_bst_in_order(tree);
   CONTENT_TYPE value = items->get_item_at(n, items);
   items->delete_list(items);
@@ -69,12 +117,37 @@ CONTENT_TYPE get_nth_item(int n, bst_node_t *tree) {
 
 
 bst_node_t *insert(int sort_val, CONTENT_TYPE content, bst_node_t *tree) {
+  /** Inserts a node with the given value and content into the tree.
+
+      Parameters
+      ----------
+      sort_val : int
+          The value that the node will be ordered by.
+      content : int
+          The content value of the new node.
+      tree : *bst_node_t
+          Pointer to the tree to add the node to.
+
+      Returns
+      -------
+      *bst_node_t
+          The root of the tree after any rebalancing triggered by the insert.
+  **/
   bst_node_t *node = int_bst_new(sort_val, content);
   return add_node(node, tree, NULL);
 }
 
 
 void in_order(bst_node_t *root, list_t *results) {
+  /** Adds the tree's nodes in increasing order of value to a linked list.
+
+      Parameters
+      ----------
+      root : *bst_node_t
+          The root of the tree to get the list of nodes for.
+      results : *list_t
+          Pointer to the list to add the nodes to.
+  **/
   if (root->left) {
     in_order(root->left, results);
   }
@@ -84,9 +157,23 @@ void in_order(bst_node_t *root, list_t *results) {
   }
 }
 
-
-// bool is_leaf(bst_node_t *tree) {
-//   if (tree->right || tree->left) {
+// /** this function is commented out because it is currently not used
+//     by any other functions so the compiler complains about it **/
+//
+// bool is_leaf(bst_node_t *node) {
+//   /** Checks if the node has any children.
+//
+//       Parameters
+//       ----------
+//       node : *bst_node_t
+//           Pointer to the node to check.
+//
+//       Returns
+//       -------
+//       bool
+//           Returns `true` if the node has any children, otherwise `false`.
+//   **/
+//   if (node->right || node->left) {
 //     return false;
 //   }
 //   else {
@@ -96,6 +183,22 @@ void in_order(bst_node_t *root, list_t *results) {
 
 
 bst_node_t *rebalance(int balance, bst_node_t *tree, bst_node_t *parent) {
+  /** Adjust the placement of the nodes so that the tree is balanced.
+
+      Parameters
+      ----------
+      balance : int
+          The balance value of the tree.
+      tree : *bst_node_t
+          Pointer to the tree to be rebalanced.
+      parent : *bst_node_t
+          Pointer to the parent node of tree. NULL if tree is the root node.
+
+      Returns
+      -------
+      *bst_node_t
+          Pointer to the new root of the tree after balancing.
+  **/
   bst_node_t *new_pivot;
   if (balance < -1) {
   	// overwighted to left
@@ -124,6 +227,24 @@ bst_node_t *rebalance(int balance, bst_node_t *tree, bst_node_t *parent) {
 
 
 int size(bst_node_t *node) {
+  /** Returns the number of nodes the in given tree.
+
+      Parameters
+      ----------
+      node : *bst_node_t
+          Pointer to the node to get the size for.
+
+      Returns
+      -------
+      int
+          The size of the node.
+
+      Notes
+      -----
+      The size of a leaf node is 1, because the tree is just that node. The
+      size of a node with children is the size of each of its children's
+      trees plus the size of itself (1).
+  **/
 	return node->n_left + node->n_right + 1;
 }
 
