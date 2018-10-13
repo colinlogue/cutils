@@ -1,4 +1,4 @@
-#include "memshuffle.h"
+#include "mshuffle.h"
 
 int rand_range(int start, int end) {
 	/** Returns a random number in the range (start, end].
@@ -18,7 +18,7 @@ int rand_range(int start, int end) {
 	return rand() % len + start;
 }
 
-void mem_shuffle(void *block_start, int n_units, size_t unit_size) {
+void mshuffle(void *block_start, int n_units, size_t unit_size) {
 	/** Breaks a block of memory into a number of units and shuffles those units.
 
 			Parameters
