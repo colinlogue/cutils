@@ -6,7 +6,7 @@ Some utilities I've made for C programs.
 ### intmath
 Some basic math functions for integers such as max and min.
 
-### memshuffle
+### mshuffle
 Shuffles memory in place using the Fisher-Yates algorithm.
 
 Usage example: shuffling an array of ints
@@ -17,7 +17,7 @@ int n_units = 5;
 int arr[5] = {1,2,3,4,5};
 
 // shuffle array
-mem_shuffle(arr, n_units, unit_size);
+mshuffle(arr, n_units, unit_size);
 
 // order after shuffle: 3 5 1 2 4
 ```
@@ -33,3 +33,6 @@ Template for a binary search tree struct and associated functions.
 
 ### templates/list_base
 Template for a doubly linked list.
+
+### templates/dict_base
+Template for hash table with string keys.
