@@ -1,64 +1,4 @@
-// START HEADER TEMPLATE //
-#ifndef <<LABEL>>_DICT_H
-#define <<LABEL>>_DICT_H
 
-#include <stdlib.h>
-#include <string.h>
-#include "misc.h"
-
-#define dict_entry <<LABEL>>_dict_entry
-#define dict_entry_t <<LABEL>>_dict_entry_t
-#define dict <<LABEL>>_dict
-#define dict_t <<LABEL>>_dict_t
-#define CONTENT_TYPE <<TYPE>>
-
-// TYPE DEFINITIONS
-typedef struct dict_entry {
-  char *key;
-  CONTENT_TYPE value;
-} dict_entry_t;
-
-typedef struct dict {
-  size_t size;
-  int (*hash_fn)(char *key);
-  dict_entry_t **entries;
-} dict_t;
-
-#define dict_clear <<LABEL>>_dict_clear
-#define dict_free <<LABEL>>_dict_free
-#define dict_insert <<LABEL>>_dict_insert
-#define dict_insert_or_update <<LABEL>>_dict_insert_or_update
-#define dict_new <<LABEL>>_dict_new
-#define dict_retrieve <<LABEL>>_dict_retrieve
-#define dict_update <<LABEL>>_dict_update
-
-// PUBLIC FUNCTION DECLARATIONS //
-void dict_clear(dict_t *);
-void dict_free(dict_t *);
-void dict_insert(char *, CONTENT_TYPE, dict_t *);
-void dict_insert_or_update(char *, CONTENT_TYPE, dict_t *);
-dict_t *dict_new(int, int (*hash_fn)(char *));
-CONTENT_TYPE dict_retrieve(char *, dict_t *);
-void dict_update(char *, CONTENT_TYPE, dict_t *);
-
-#undef dict_clear
-#undef dict_free
-#undef dict_insert
-#undef dict_insert_or_update
-#undef dict_new
-#undef dict_retrieve
-#undef dict_update
-
-#undef dict_entry
-#undef dict_entry_t
-#undef dict
-#undef dict_t
-#undef CONTENT_TYPE
-
-#endif
-// END HEADER TEMPLATE//
-
-// <<SPLIT>> //
 
 // START BASE TEMPLATE //
 
@@ -77,34 +17,34 @@ dict_clear(dict_t *d) : void
     Frees memory for all entries and sets entry pointers to NULL.
 dict_free(dict_t *d) : void
     Frees memory for the dict and all of its entries.
-dict_insert(char *key, <<TYPE>> value, dict_t *d) : void
+dict_insert(char *key, int value, dict_t *d) : void
     Adds the key-value pair to the dict.
-dict_insert_or_update(char *key, <<TYPE>> value, dict_t *d) : void
+dict_insert_or_update(char *key, int value, dict_t *d) : void
     Inserts of updates the entry depending on if the key is present.
 dict_new(int table_size) : *dict_t
     Creates a new dict and returns a pointer to it.
-dict_retrieve(char *key, dict_t *d) : <<TYPE>>
+dict_retrieve(char *key, dict_t *d) : int
     Searches the dict for the key and returns the value of its entry.
-dict_update(char *key, <<TYPE>> value, dict_t *d) : void
+dict_update(char *key, int value, dict_t *d) : void
     Updates the entry with the given key to the given value.
 
 Internal functions
 ------------------
 entry_get_by_key(char *key, dict_t *d) : dict_entry_t
 entry_delete(dict_entry_t *entry) : void
-entry_new(char* key, <<TYPE>> value, dict_t *d) : *entry_t
+entry_new(char* key, int value, dict_t *d) : *entry_t
 
 **/
 
-#include "<<LABEL>>_dict.h"
+#include "int_dict.h"
 
 const int HASH_STR_POLYNOMIAL_X = 19;
 
-#define dict_entry <<LABEL>>_dict_entry
-#define dict_entry_t <<LABEL>>_dict_entry_t
-#define dict <<LABEL>>_dict
-#define dict_t <<LABEL>>_dict_t
-#define CONTENT_TYPE <<TYPE>>
+#define dict_entry int_dict_entry
+#define dict_entry_t int_dict_entry_t
+#define dict int_dict
+#define dict_t int_dict_t
+#define CONTENT_TYPE int
 
 
 // PRIVATE FUNCTION DECLARATIONS //
@@ -113,13 +53,13 @@ void entry_delete(dict_entry_t *);
 dict_entry_t *entry_new(char* key, int value, dict_t *d);
 
 
-#define dict_clear <<LABEL>>_dict_clear
-#define dict_free <<LABEL>>_dict_free
-#define dict_insert <<LABEL>>_dict_insert
-#define dict_insert_or_update <<LABEL>>_dict_insert_or_update
-#define dict_new <<LABEL>>_dict_new
-#define dict_retrieve <<LABEL>>_dict_retrieve
-#define dict_update <<LABEL>>_dict_update
+#define dict_clear int_dict_clear
+#define dict_free int_dict_free
+#define dict_insert int_dict_insert
+#define dict_insert_or_update int_dict_insert_or_update
+#define dict_new int_dict_new
+#define dict_retrieve int_dict_retrieve
+#define dict_update int_dict_update
 
 // PUBLIC FUNCTIONS //
 void dict_clear(dict_t *d) {
@@ -152,12 +92,6 @@ void dict_free(dict_t *d) {
 }
 
 
-void dict_insert(char *key, CONTENT_TYPE value, dict_t *d) {
-  int key_idx = d->hash_fn(key);
-  blarghh!
-}
-
-
 dict_t *dict_new(int table_size, int (*hash_fn)(char *)) {
   /** Creates a new dict and returns a pointer to it.
 
@@ -187,21 +121,21 @@ CONTENT_TYPE dict_retrieve(char *key, dict_t *d) {
 
       Returns
       -------
-      <<TYPE>>
+      int
           The value of the entry for the given key.
   **/
   return entry_get_by_key(key, d)->value;
 }
 
 
-void dict_update(char *key, <<TYPE>> value, dict_t *d) {
+void dict_update(char *key, int value, dict_t *d) {
   /** Updates the entry with the given key to the given value.
 
       Parameters
       ----------
       key : *char
           Pointer to the key string of the entry to update.
-      value : <<TYPE>>
+      value : int
           Value to set the key's entry to.
       d : *dict_t
           Pointer to the dictionary to update the entry in.

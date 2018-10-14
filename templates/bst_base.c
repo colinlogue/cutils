@@ -85,17 +85,17 @@ bst_node_t *add_node(bst_node_t *new_node, bst_node_t *tree, bst_node_t *parent)
   bst_node_t **next_ptr;
   // sort direction
   if (new_node->sort_val < tree->sort_val) {
-  	next_ptr = &(tree->left);
-  	tree->n_left += size(new_node);
+    next_ptr = &(tree->left);
+    tree->n_left += size(new_node);
   }
   else {
-  	next_ptr = &(tree->right);
-  	tree->n_right += size(new_node);
+    next_ptr = &(tree->right);
+    tree->n_right += size(new_node);
   }
   // check if end of branch
   if (*next_ptr) {
     // if next_ptr doesn't point to NULL then recursively call add_node 
-  	add_node(new_node, *next_ptr, tree);
+    add_node(new_node, *next_ptr, tree);
   }
   else {
     // if next_ptr does point to NULL, point it to new_node instead
@@ -103,7 +103,7 @@ bst_node_t *add_node(bst_node_t *new_node, bst_node_t *tree, bst_node_t *parent)
   }
   int balance = tree->n_right - tree->n_left;
   if (balance < -REBALANCE_THRESHOLD || balance > REBALANCE_THRESHOLD) {
-  	return rebalance(balance, tree, parent);
+    return rebalance(balance, tree, parent);
   }
   else {
     return tree;
@@ -239,26 +239,26 @@ bst_node_t *rebalance(int balance, bst_node_t *tree, bst_node_t *parent) {
   **/
   bst_node_t *new_pivot;
   if (balance < -1) {
-  	// overwighted to left
-  	new_pivot = tree->left;
+    // overwighted to left
+    new_pivot = tree->left;
     tree->left = NULL;
-  	tree->n_left = 0;
+    tree->n_left = 0;
   }
   else if (balance > 1) {
-  	// overweighted to right
-  	new_pivot = tree->right;
+    // overweighted to right
+    new_pivot = tree->right;
     tree->right = NULL;
-  	tree->n_right = 0;
+    tree->n_right = 0;
   }
   if (parent) {
-  	// if tree is not root node for whole tree
-  	if (parent->left == tree) {
-  		// if on parent's left
-  		parent->left = new_pivot;
-  	}
-  	else {
-  		parent->right = new_pivot;
-  	}
+    // if tree is not root node for whole tree
+    if (parent->left == tree) {
+      // if on parent's left
+      parent->left = new_pivot;
+    }
+    else {
+      parent->right = new_pivot;
+    }
   }
   return add_node(tree, new_pivot, parent);
 }
@@ -283,7 +283,7 @@ int size(bst_node_t *node) {
       size of a node with children is the size of each of its children's
       trees plus the size of itself (1).
   **/
-	return node->n_left + node->n_right + 1;
+  return node->n_left + node->n_right + 1;
 }
 
 
@@ -301,7 +301,7 @@ bst_node_t *<<LABEL>>_bst_new(int sort_val, CONTENT_TYPE content) {
 
 
 bst_node_t *<<LABEL>>_bst_insert(int sort_val, CONTENT_TYPE content, bst_node_t *tree) {
-	return insert(sort_val, content, tree);
+  return insert(sort_val, content, tree);
 }
 
 
