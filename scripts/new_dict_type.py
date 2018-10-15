@@ -5,9 +5,9 @@ def new_dict_type(content_type, label):
 		f_data = f.read()
 	f_data = f_data.replace('<<LABEL>>', label).replace('<<TYPE>>', content_type)
 	h_data, _, c_data = f_data.partition('// <<SPLIT>> //');
-	with open(label + '_dict.h', 'w') as h_new:
+	with open('source/' + label + '_dict.h', 'w') as h_new:
 		h_new.write(h_data);
-	with open(label + '_dict.c', 'w') as c_new:
+	with open('source/' + label + '_dict.c', 'w') as c_new:
 		c_new.write(c_data)
 
 if __name__ == "__main__":

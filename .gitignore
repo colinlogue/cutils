@@ -2,3 +2,4 @@
 *.exe.stackdump
 test.c
 Makefile
+local/
